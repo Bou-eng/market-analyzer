@@ -10,21 +10,18 @@ from app.db.connection import engine  # noqa: E402
 
 
 def derive_snapshot_date(df: pd.DataFrame, snapshot_arg: str) -> str:
-    """Prefer last_scraped from the CSV; fall back to '<snapshot>-01'."""
     if "last_scraped" in df.columns:
         scraped = pd.to_datetime(df["last_scraped"], errors="coerce").dropna()
         if not scraped.empty:
             return scraped.max().date().isoformat()
-    # fallback: "2026-09" -> "2026-09-01"
     return f"{snapshot_arg}-01"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Ingest Inside Airbnb listings CSV into PostgreSQL.")
     parser.add_argument("--city", default="istanbul")
-    parser.add_argument("--snapshot", required=True, help="e.g. 2026-09")
-    parser.add_argument("--snapshot-date", default=None,
-                        help="ISO date to stamp on rows; default: derived from last_scraped")
+    parser.add_argument("--snapshot", required=True)
+    parser.add_argument("--snapshot-date", default=None)
     parser.add_argument("--table", default="listings")
     args = parser.parse_args()
 
@@ -44,25 +41,43 @@ def main() -> None:
     df["snapshot_date"] = snapshot_date
     print(f"  snapshot_date = {snapshot_date}")
 
-    staging = f"{args.table}__staging"
+    backup = f"{args.table}__backup"
 
-    # Load into staging table first (atomic swap below)
+    # 1. Move current table out of the way (if it exists)
+    with engine.begin() as conn:
+        conn.execute(text(f'DROP TABLE IF EXISTS "{backup}"'))
+        exists = conn.execute(
+            text(f"SELECT to_regclass('public.{args.table}') IS NOT NULL")
+        ).scalar()
+        if exists:
+            conn.execute(text(f'ALTER TABLE "{args.table}" RENAME TO "{backup}"'))
+
+    # 2. Load fresh data directly into the final table name
     df.to_sql(
-        staging,
+        args.table,
         engine,
         if_exists="replace",
         index=False,
         method="multi",
-        chunksize=1000,
+        chunksize=100,
     )
 
-    # Atomic swap: drop old, rename staging -> final
-    with engine.begin() as conn:
-        conn.execute(text(f'DROP TABLE IF EXISTS "{args.table}"'))
-        conn.execute(text(f'ALTER TABLE "{staging}" RENAME TO "{args.table}"'))
+    # 3. Verify, then promote or rollback
+    with engine.connect() as conn:
         count = conn.execute(text(f'SELECT COUNT(*) FROM "{args.table}"')).scalar()
 
-    print(f"Loaded {count:,} rows into '{args.table}'.")
+    if count == len(df):
+        with engine.begin() as conn:
+            conn.execute(text(f'DROP TABLE IF EXISTS "{backup}"'))
+        print(f"✅ Loaded and promoted {count:,} rows into '{args.table}'.")
+    else:
+        with engine.begin() as conn:
+            conn.execute(text(f'DROP TABLE IF EXISTS "{args.table}"'))
+            if exists:
+                conn.execute(text(f'ALTER TABLE "{backup}" RENAME TO "{args.table}"'))
+        raise SystemExit(
+            f"❌ Ingestion mismatch: expected {len(df):,}, found {count:,}. Restored backup."
+        )
 
 
 if __name__ == "__main__":
