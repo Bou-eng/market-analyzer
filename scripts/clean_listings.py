@@ -43,6 +43,18 @@ def main() -> None:
     report["steps"].append({"step": "validity_rules",
                             "rows_removed": before - len(df)})
 
+    # --- 3b. remove long-stay listings priced as nightly ---
+    # Listings with minimum_nights >= 30 are long-term rentals.
+    # Their "price" field often holds the monthly price (proved by
+    # price_quote_total_price / price == minimum_nights for many rows).
+    before = len(df)
+    long_stay = df["minimum_nights"] >= 30
+    df = df[~long_stay].copy()
+    report["steps"].append({
+        "step": "drop_long_stay_listings",
+        "rows_removed": before - len(df),
+        "rationale": "minimum_nights >= 30 => monthly/yearly price entered as nightly",
+    })
     # --- 4. feature engineering ---
     df["amenity_count"] = df["amenities"].map(count_amenities)
     df["distance_to_center_km"] = haversine_km(
