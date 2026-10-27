@@ -46,3 +46,14 @@ Silivri appears as an extreme outlier (15,371 TRY) but has a very small sample s
 
 **Limitation:** 
 Neighborhood *name* is a proxy — it doesn't capture block-level variation (e.g., sea-view vs. interior streets within the same neighborhood). It also acts as a partial proxy for property type (e.g., Silivri = villas), so a future model should include both.
+
+## Finding 3 — Prices concentrate geographically around the central Bosphorus and coastal corridors
+
+**Evidence:** See `reports/eda/geographic_prices.png`. The high-price listings (yellow/light orange dots) cluster heavily around the central Bosphorus-adjacent neighborhoods and the western coastline, while lower-priced listings (darker purple dots) spread further inland and to the outer districts.
+
+**Interpretation:** 
+Location captures information beyond "which neighborhood it's in" — it's the actual distance to the sea, the city center, and major transport corridors. The visual clustering confirms that latitude and longitude (and the engineered `distance_to_center_km` feature) will be highly predictive for price modeling.
+
+**Limitation:** 
+Listing coordinates are approximate (Airbnb intentionally jitters them for privacy). Therefore, we can observe macro-level clusters but cannot claim block-level precision (e.g., we cannot distinguish a sea-view apartment from an interior street apartment if they share the same jittered coordinate).
+
