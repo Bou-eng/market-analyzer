@@ -5,3 +5,15 @@ data/raw/**/*.csv.gz
 data/interim/*
 data/processed/*.parquet
 data/processed/*.json
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
