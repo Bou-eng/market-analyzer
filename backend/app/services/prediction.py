@@ -53,9 +53,20 @@ def predict_full(
     cluster_model: BaseEstimator,
     features: dict,
 ) -> dict:
-    """Full prediction pipeline: price + cluster + confidence."""
+    """Full prediction pipeline: predict price, then cluster USING the predicted price.
+
+    The cluster model was trained on CLUSTER_FEATURES which includes `price`.
+    At serving time, `price` is unknown (it's what we're predicting). So we
+    predict price first, then feed the *predicted* price into the cluster
+    features. This makes the cluster assignment semantically meaningful:
+    "given these features and this predicted price, which market tier is this?"
+    """
     price = predict_price(price_model, features)
-    cluster_id = predict_cluster(cluster_model, features)
+
+    # Inject the predicted price into the features dict for the cluster model
+    cluster_features = {**features, "price": price}
+    cluster_id = predict_cluster(cluster_model, cluster_features)
+
     return {
         "predicted_price": price,
         "cluster_id": cluster_id,

@@ -45,7 +45,7 @@ def get_neighbourhoods(
 
 def get_clusters_from_csv() -> list[dict]:
     """Read the Phase 4 artifact directly."""
-    profiles = pd.read_csv("reports/clusters/cluster_profiles.csv", index_col=0)
+    profiles = pd.read_csv(settings.CLUSTER_PROFILES_PATH, index_col=0)
     return [
         {
             "cluster_id": int(cid),

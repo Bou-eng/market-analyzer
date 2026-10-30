@@ -1,17 +1,14 @@
-"""Environment-variable-based settings for the API.
-
-This is the SINGLE place where paths, currency, and origins are configured.
-Env vars override defaults; same code runs locally and in production.
-"""
 from __future__ import annotations
 
 import os
 from pathlib import Path
 
+# Project root = market-analyzer/ (config.py lives at backend/app/config.py)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
 
 class Settings:
-    # --- Model artifact paths ---
-    MODEL_DIR: Path = Path(os.getenv("MODEL_DIR", "models"))
+    MODEL_DIR: Path = PROJECT_ROOT / os.getenv("MODEL_DIR", "models")
     PRICE_MODEL_PATH: Path = MODEL_DIR / os.getenv(
         "PRICE_MODEL_FILE", "price_pipeline.joblib"
     )
@@ -19,10 +16,13 @@ class Settings:
         "CLUSTER_MODEL_FILE", "cluster_pipeline.joblib"
     )
 
-    # --- Data path for market stats endpoints ---
-    DATA_PATH: Path = Path(os.getenv(
+    DATA_PATH: Path = PROJECT_ROOT / os.getenv(
         "DATA_PATH", "data/processed/listings_clean.parquet"
-    ))
+    )
+
+    CLUSTER_PROFILES_PATH: Path = PROJECT_ROOT / os.getenv(
+        "CLUSTER_PROFILES_PATH", "reports/clusters/cluster_profiles.csv"
+    )
 
     # --- City / currency context ---
     CITY: str = os.getenv("CITY", "Istanbul")
