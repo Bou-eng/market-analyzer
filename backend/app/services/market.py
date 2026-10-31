@@ -42,6 +42,24 @@ def get_neighbourhoods(
         for name, row in summary.iterrows()
     ]
 
+def get_distribution(df: pd.DataFrame, bins: int = 20) -> list[dict]:
+    """Price histogram bins for the frontend chart."""
+    # Filter out extreme outliers for a readable chart (e.g., < P99)
+    cutoff = df["price"].quantile(0.99)
+    filtered = df[df["price"] <= cutoff]["price"]
+    
+    counts, bin_edges = pd.cut(filtered, bins=bins, retbins=True)
+    counts = counts.value_counts(sort=False)
+    
+    return [
+        {
+            "bin_start": float(bin_edges[i]),
+            "bin_end": float(bin_edges[i+1]),
+            "count": int(counts.iloc[i])
+        }
+        for i in range(len(counts))
+    ]
+
 
 def get_clusters_from_csv() -> list[dict]:
     """Read the Phase 4 artifact directly."""
