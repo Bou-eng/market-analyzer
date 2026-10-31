@@ -24,6 +24,11 @@ class Settings:
         "CLUSTER_PROFILES_PATH", "reports/clusters/cluster_profiles.csv"
     )
 
+    MODEL_METRICS_PATH: Path = PROJECT_ROOT / os.getenv(
+        "MODEL_METRICS_PATH", "reports/model_metrics.json"
+    )
+
+
     # --- City / currency context ---
     CITY: str = os.getenv("CITY", "Istanbul")
     CURRENCY: str = os.getenv("CURRENCY", "TRY")

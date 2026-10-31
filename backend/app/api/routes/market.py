@@ -20,9 +20,11 @@ router = APIRouter(prefix="/api/v1/market", tags=["market"])
 
 @router.get("/model-metrics")
 def model_metrics():
-    path = Path("reports/model_metrics.json")
+    path = settings.MODEL_METRICS_PATH
+    
     if not path.exists():
         raise HTTPException(status_code=404, detail="Metrics not found")
+        
     return json.loads(path.read_text())
 
 
