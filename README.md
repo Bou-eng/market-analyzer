@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏙️ Dynamic Market Analyzer
+# 🏙️ Market Analyzer
 
 ### From raw short-term rental data to market intelligence and explainable price estimates.
 
@@ -36,7 +36,7 @@ It is designed around two connected systems:
 - **Research pipeline:** ingest, validate, clean, analyze, and model historical listing data.
 - **Serving application:** load trained models once, validate property inputs, return predictions and market statistics through an API, and present the results in React.
 
-The current implementation covers **Phases 1–8**: ingestion, cleaning, EDA, clustering, supervised learning, FastAPI, the React interface, and automated tests/CI. Public deployment and final portfolio packaging remain future work.
+The current implementation covers **Phases 1–8**: ingestion, cleaning, EDA, clustering, supervised learning, FastAPI, a five-page bilingual React interface, and automated quality checks. Public deployment and final portfolio packaging remain future work.
 
 > [!IMPORTANT]
 > **What the model predicts:** an *advertised nightly listing price* in Turkish lira (TRY). It does **not** predict actual bookings, occupancy, revenue, profit, or a guaranteed achievable rental rate.
@@ -45,16 +45,16 @@ The current implementation covers **Phases 1–8**: ingestion, cleaning, EDA, cl
 
 | | Recorded result |
 |---|---:|
-| 📥 Raw Istanbul listings | **24,553** |
+| 📥 Rows entering the cleaning pipeline | **27,232** |
 | ✅ Analysis-ready listings | **16,558** |
 | 🧩 Discovered market segments | **3** |
 | 🏆 Selected price model | **HistGradientBoosting** |
-| 📉 Reported holdout MAE | **TRY 1,981.28** |
+| 📉 Latest holdout MAE | **TRY 1,971.70** |
 | 📊 Reported holdout R² | **0.24** |
-| 🌐 Implemented dashboard pages | **4** |
-| 🧪 Quality tooling | **pytest · Ruff · GitHub Actions** |
+| 🌐 Implemented dashboard pages | **5** |
+| 🧪 Quality tooling | **pytest · Ruff · ESLint · TypeScript · CI workflow** |
 
-*Figures are taken from the project's implementation log for the September 2026 Istanbul dataset. Model results are from the recorded Phase 5 evaluation; models were subsequently retrained for library compatibility in Phase 8, so the latest `reports/model_metrics.json` should be checked before updating published benchmarks.*
+*Dataset counts come from `data/processed/data_quality_report.json`; model results come from the current `reports/model_metrics.json` artifact for the September 2026 Istanbul snapshot.*
 
 ## Table of contents
 
@@ -83,10 +83,10 @@ The current implementation covers **Phases 1–8**: ingestion, cleaning, EDA, cl
 | **Market analytics** | Price distributions, neighbourhood medians, geographic price patterns, amenity comparisons |
 | **Unsupervised ML** | K-Means segmentation, elbow/silhouette evaluation, saved cluster profiles, segment labels |
 | **Supervised ML** | Median baseline, Linear Regression, Ridge Regression, HistGradientBoosting; saved preprocessing/model pipeline |
-| **API** | Typed FastAPI endpoints for predictions, market statistics, options, distribution, and model metrics |
-| **Frontend** | React + TypeScript, overview, prediction form, segments, model evaluation, responsive charts |
-| **Experience** | Dark-mode-first interface, theme toggle, Turkish language support, data-driven form options |
-| **Reliability** | Unit tests, API/contract tests, Ruff linting, GitHub Actions CI |
+| **API** | Typed FastAPI endpoints for predictions, market statistics, form options, distribution, model metrics, and data quality |
+| **Frontend** | React + TypeScript pages for overview, prediction, segments, model evaluation, and data-pipeline quality |
+| **Experience** | Responsive desktop/mobile navigation, light/dark themes, full English/Turkish UI, accessible labels, data-driven form options |
+| **Reliability** | Backend unit/contract tests, Ruff, frontend ESLint and TypeScript production builds, CI workflow definition |
 
 ## System architecture
 
@@ -130,10 +130,10 @@ flowchart TB
 | Analysis | Matplotlib | Research charts and market reports |
 | ML | scikit-learn, joblib | Clustering, regression, serialization |
 | Backend | FastAPI, Pydantic, Uvicorn | Validated inference and market API |
-| Frontend | React, TypeScript, Vite | Browser application |
-| UI | Tailwind CSS, Lucide React | Responsive interface and icons |
+| Frontend | React 19, TypeScript 6, Vite 8 | Browser application |
+| UI | Tailwind CSS 4, Lucide React | Responsive interface, theme system, and icons |
 | Charts | Recharts | Interactive dashboard visualizations |
-| Quality | pytest, Ruff, GitHub Actions | Automated verification |
+| Quality | pytest, Ruff, ESLint, TypeScript | Backend tests and frontend static/build verification |
 
 ## Dataset and data pipeline
 
@@ -146,7 +146,7 @@ The project begins with the detailed `listings.csv.gz` snapshot. Raw inputs rema
 
 ```mermaid
 flowchart LR
-    A["24,553 raw rows"] --> B["Parse and validate"]
+    A["27,232 input rows"] --> B["Parse and validate"]
     B --> C["Apply documented filters"]
     C --> D["Engineer features"]
     D --> E["16,558 cleaned rows"]
@@ -171,7 +171,7 @@ flowchart LR
 
 The analysis-ready dataset is saved to `data/processed/listings_clean.parquet`; its audit information is written to `data/processed/data_quality_report.json`.
 
-**Detailed documentation:** [Cleaning decisions](reports/cleaning_decisions.md) · [Data layout](data/README.md)
+**Detailed documentation:** [Data-quality report](data/processed/data_quality_report.json) · [Data layout](data/README.md)
 
 ## Exploratory data analysis
 
@@ -253,7 +253,7 @@ The prediction task estimates advertised nightly prices from listing characteris
 | Median baseline | 3,196.52 | 8,481.95 | −0.04 |
 | Linear Regression | 2,506.45 | 7,786.61 | 0.12 |
 | Ridge Regression | 2,496.21 | 7,779.52 | 0.13 |
-| **HistGradientBoosting 🏆** | **1,981.28** | **7,242.18** | **0.24** |
+| **HistGradientBoosting 🏆** | **1,971.70** | **7,232.33** | **0.24** |
 
 **Selected model:** `HistGradientBoostingRegressor`, stored as a fitted preprocessing-and-model artifact in `models/price_pipeline.joblib`.
 
@@ -273,7 +273,7 @@ The residual analysis identified **underprediction for very expensive listings**
 
 ## Web dashboard
 
-The **React + TypeScript** frontend is implemented and connected to FastAPI through a typed client. It uses a **dark-mode-first design**, a top navigation bar, responsive layouts, Recharts, Lucide icons, and **Turkish-language support**.
+The **React + TypeScript** frontend is implemented and connected to FastAPI through a typed client. It uses responsive desktop/mobile navigation, Recharts, Lucide icons, a custom Market Analyzer favicon/title, light and dark themes, and instant **English/Turkish language switching** implemented with React Context.
 
 | Page | What's available |
 |---|---|
@@ -281,6 +281,7 @@ The **React + TypeScript** frontend is implemented and connected to FastAPI thro
 | **Predict** | Backend-driven property options, validated form, estimated nightly price, confidence, market-segment badge |
 | **Segments** | Three segment profile cards, market-share pie chart, normalized radar chart |
 | **Model** | Selected model, MAE/RMSE comparison, saved residual visualization |
+| **Data** | Pipeline architecture, source/clean row counts, validation status, localized quality metrics, artifact inventory |
 
 The prediction form reads valid categories and feature bounds from the API. Rare property types with fewer than **50 listings** are excluded from the supported dropdown options.
 
@@ -291,7 +292,7 @@ The prediction form reads valid categories and feature bounds from the API. Rare
 - **Input validation:** numeric limits are supplied by the backend, with Pydantic providing server-side enforcement.
 - **Prediction context:** display currency, model version, assigned segment, and confidence label.
 - **Responsive UI:** compact navigation and chart layouts for smaller screens.
-- **Theme and language:** light/dark toggle and Turkish UI support.
+- **Theme and language:** independent light/dark toggle and complete English/Turkish translations without an external i18n library.
 - **Error handling:** loading and API error states rather than assuming every request succeeds.
 
 </details>
@@ -310,6 +311,7 @@ The FastAPI service serves saved models and precomputed analytics. Interactive, 
 | `GET` | `/api/v1/market/distribution` | Histogram-ready distribution bins |
 | `GET` | `/api/v1/market/model-metrics` | Recorded model-evaluation metrics |
 | `GET` | `/api/v1/market/options` | Actual category options and validated input ranges |
+| `GET` | `/api/v1/market/data-quality` | Cleaning row counts, validation checks, and localized quality-metric source data |
 | `GET` | `/docs` | Swagger UI |
 
 ### Request and inference flow
@@ -419,11 +421,11 @@ npm run dev
 
 Open the local URL printed by Vite (typically **http://localhost:5173**).
 
-Configure the frontend API base URL according to `frontend`'s environment setup so requests target the running FastAPI service. In development, the backend CORS settings allow the configured local frontend origin.
+The frontend defaults to **`http://127.0.0.1:8000`**. To use another API origin, set `VITE_API_BASE_URL` in the frontend environment. The backend reads allowed browser origins from `ALLOWED_ORIGINS` and defaults to **`http://localhost:5173`**.
 
 ## Testing and continuous integration
 
-**Phase 8 added the automated quality layer** for data transformations, feature preprocessing, model serialization, and API contracts.
+**Phase 8 added the automated quality layer** for data transformations, feature preprocessing, model serialization, API contracts, and frontend compilation.
 
 ### Tests and checks
 
@@ -435,7 +437,8 @@ Configure the frontend API base URL according to `frontend`'s environment setup 
 | Model | Saved joblib files can be loaded |
 | Contracts | API request fields remain consistent with expected model features |
 | Linting | Ruff import, unused-code, and undefined-name checks |
-| CI | GitHub Actions runs Python checks on pushes and pull requests |
+| Frontend | ESLint plus TypeScript/Vite production build |
+| CI definition | Python dependency installation, Ruff, and pytest on pushes and pull requests |
 
 ```bash
 # From the repository root
@@ -445,11 +448,19 @@ PYTHONPATH=. pytest tests/ -v
 # From the repository root (in a separate shell)
 ruff check backend/
 ruff format --check backend/
+
+# Frontend checks
+cd frontend
+npm run lint
+npm run build
 ```
 
 On Windows PowerShell, set `$env:PYTHONPATH = "."` before running pytest from `backend/`.
 
-**CI workflow:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml) · **Ruff configuration:** [`backend/pyproject.toml`](backend/pyproject.toml)
+**CI workflow definition:** [`backend/.github/workflows/ci.yml`](backend/.github/workflows/ci.yml) · **Ruff configuration:** [`backend/pyproject.toml`](backend/pyproject.toml)
+
+> [!NOTE]
+> GitHub discovers Actions workflows only from the repository-root `.github/workflows/` directory. The current workflow definition is stored under `backend/.github/workflows/`; move it to the root workflow directory before relying on hosted CI execution.
 
 > [!TIP]
 > The project records an actual model-serialization compatibility issue after a scikit-learn upgrade. The solution was to retrain and re-serialize the artifacts. Keep dependency versions pinned and load joblib files **only from trusted sources**.
@@ -461,10 +472,8 @@ On Windows PowerShell, set `$env:PYTHONPATH = "."` before running pytest from `b
 
 ```text
 market-analyzer/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
 ├── backend/
+│   ├── .github/workflows/ci.yml
 │   ├── requirements.txt
 │   ├── pyproject.toml
 │   ├── app/
@@ -497,8 +506,21 @@ market-analyzer/
 │       └── fixtures/
 │           └── sample_listings.csv
 ├── frontend/
-│   └── src/                        # React + TypeScript application
+│   ├── public/
+│   │   ├── favicon.svg             # Market Analyzer branding
+│   │   └── residual_analysis.png
+│   └── src/
+│       ├── api/client.ts            # Typed FastAPI client
+│       ├── components/Layout.tsx    # Responsive navigation and theme controls
+│       ├── contexts/LanguageContext.tsx
+│       └── pages/
+│           ├── OverviewPage.tsx
+│           ├── PredictPage.tsx
+│           ├── SegmentsPage.tsx
+│           ├── ModelPage.tsx
+│           └── DataPage.tsx
 ├── scripts/
+│   ├── build_analysis_dataset.py
 │   ├── ingest_listings.py
 │   ├── clean_listings.py
 │   ├── validate_pipeline.py
@@ -519,7 +541,6 @@ market-analyzer/
 │   ├── cluster_pipeline.joblib
 │   └── price_pipeline.joblib
 ├── reports/
-│   ├── cleaning_decisions.md
 │   ├── insights.md
 │   ├── clustering_decisions.md
 │   ├── model_comparison.md
@@ -561,7 +582,7 @@ market-analyzer/
 
 1. **Advertised ≠ booked:** listing prices do not tell us the final paid rate or actual earnings.
 2. **Single city and snapshot:** the current results describe Istanbul in September 2026, not seasonal trends or future prices.
-3. **Prediction error is material:** the recorded model's MAE is approximately TRY 1,981, with particularly large errors at the high end.
+3. **Prediction error is material:** the current saved metrics report a holdout MAE of approximately TRY 1,972, with particularly large errors at the high end.
 4. **Heuristic confidence only:** `high` and `low` flags are rule-based warnings, not calibrated probabilities.
 5. **Hotel rooms are unreliable:** the documented hotel-room subgroup is small and has high prediction error.
 6. **Location is an approximation:** neighbourhood labels and distance from one city-centre reference do not capture every location factor.
@@ -579,8 +600,8 @@ market-analyzer/
 | 04 | K-Means segmentation | ✅ Completed |
 | 05 | Regression and evaluation | ✅ Completed |
 | 06 | FastAPI inference and analytics | ✅ Completed |
-| 07 | React dashboard, dark mode, Turkish support | ✅ Completed |
-| 08 | Tests, Ruff, and GitHub Actions | ✅ Completed |
+| 07 | Five-page React dashboard, responsive navigation, themes, English/Turkish support | ✅ Completed |
+| 08 | Backend tests, Ruff, frontend checks, and CI workflow definition | ✅ Completed |
 | 09 | Public deployment and production configuration | 🔜 Planned |
 | 10 | Final portfolio polish and demo | 🔜 Planned |
 
