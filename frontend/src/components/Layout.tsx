@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Moon, Sun, Activity, BarChart3, Home, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom'; 
 import { cn } from '../utils';
-import { PieChart, TrendingUp, Cpu } from 'lucide-react';
+import { PieChart, Cpu } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Default to Night Mode
   const [isDark, setIsDark] = useState(true); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language, t, toggleLanguage } = useLanguage();
 
   // This useEffect is what actually applies the 'dark' class to the HTML tag
   useEffect(() => {
@@ -31,14 +33,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex min-w-0 items-center gap-8">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex min-w-0 items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xl">
                 <Activity className="w-6 h-6 shrink-0" />
-                <span className="truncate">Market Analyzer</span>
+                <span className="truncate">{t('app_name')}</span>
               </Link>
 
-              <nav className="hidden md:flex gap-1" aria-label="Primary navigation">
-                <NavItem to="/" icon={<Home size={18} />} label="Overview" />
-                <NavItem to="/predict" icon={<BarChart3 size={18} />} label="Predict" />
-                <NavItem to="/segments" icon={<PieChart size={18} />} label="Segments" />
-                <NavItem to="/model" icon={<Cpu size={18} />} label="Model" />
+              <nav className="hidden md:flex gap-1" aria-label={t('aria_primary_navigation')}>
+                <NavItem to="/" icon={<Home size={18} />} label={t('nav_overview')} />
+                <NavItem to="/predict" icon={<BarChart3 size={18} />} label={t('nav_predict')} />
+                <NavItem to="/segments" icon={<PieChart size={18} />} label={t('nav_segments')} />
+                <NavItem to="/model" icon={<Cpu size={18} />} label={t('nav_model')} />
               </nav>
             </div>
             
@@ -48,20 +50,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={() => setIsDark(!isDark)}
                 className="p-2 rounded-full text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
-                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                aria-label={isDark ? t('aria_switch_light') : t('aria_switch_dark')}
               >
                 {isDark ? <Sun size={20} /> : <Moon size={20} />}
               </button>
 
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                className="p-2 rounded-full text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+                aria-label={language === 'en' ? t('aria_switch_turkish') : t('aria_switch_english')}
+              >
+                {language === 'en' ? 'TR' : 'EN'}
+              </button>
+
               <div className="hidden lg:block text-sm text-slate-600 dark:text-slate-400 font-medium border-l border-slate-200 dark:border-slate-700 pl-4">
-                Snapshot: Sep 2026
+                {t('snapshot')}
               </div>
 
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
-                aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-label={isMenuOpen ? t('aria_close_menu') : t('aria_open_menu')}
               >
                 {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
@@ -75,12 +86,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
               isMenuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
             )}
           >
-            <nav className="overflow-hidden" aria-label="Mobile navigation">
+            <nav className="overflow-hidden" aria-label={t('aria_mobile_navigation')}>
               <div className="flex flex-col gap-1 pb-4 pt-1">
-                <NavItem to="/" icon={<Home size={18} />} label="Overview" onNavigate={() => setIsMenuOpen(false)} />
-                <NavItem to="/predict" icon={<BarChart3 size={18} />} label="Predict" onNavigate={() => setIsMenuOpen(false)} />
-                <NavItem to="/segments" icon={<PieChart size={18} />} label="Segments" onNavigate={() => setIsMenuOpen(false)} />
-                <NavItem to="/model" icon={<Cpu size={18} />} label="Model" onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/" icon={<Home size={18} />} label={t('nav_overview')} onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/predict" icon={<BarChart3 size={18} />} label={t('nav_predict')} onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/segments" icon={<PieChart size={18} />} label={t('nav_segments')} onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/model" icon={<Cpu size={18} />} label={t('nav_model')} onNavigate={() => setIsMenuOpen(false)} />
               </div>
             </nav>
           </div>

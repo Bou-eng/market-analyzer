@@ -4,12 +4,14 @@ import type { MarketSummary, DistributionBin, NeighbourhoodStat } from '../types
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 import { TrendingUp, Users, Home, DollarSign } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function OverviewPage() {
   const [summary, setSummary] = useState<MarketSummary | null>(null);
   const [dist, setDist] = useState<DistributionBin[]>([]);
   const [neighbourhoods, setNeighbourhoods] = useState<NeighbourhoodStat[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     Promise.all([api.getSummary(), api.getDistribution(), api.getNeighbourhoods()])
@@ -23,27 +25,27 @@ export function OverviewPage() {
   }, []);
 
   if (loading) return <div className="animate-pulse h-96 bg-slate-200 dark:bg-slate-800 rounded-xl" />;
-  if (!summary) return <div className="text-red-700 dark:text-red-400">Failed to load data.</div>;
+  if (!summary) return <div className="text-red-700 dark:text-red-400">{t('overview_load_error')}</div>;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Market Overview</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Istanbul short-term rental market summary.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('overview_title')}</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">{t('overview_description')}</p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatCard title="Active Listings" value={summary.count.toLocaleString()} icon={<Home />} trend="+6%" />
-        <StatCard title="Median Price" value={`${summary.currency} ${summary.median_price.toLocaleString()}`} icon={<DollarSign />} trend="+8%" />
-        <StatCard title="75th Percentile" value={`${summary.currency} ${summary.p75_price.toLocaleString()}`} icon={<TrendingUp />} trend="+7%" />
-        <StatCard title="Avg. Capacity" value="3 guests" icon={<Users />} trend="0%" />
+        <StatCard title={t('active_listings')} value={summary.count.toLocaleString()} icon={<Home />} trend="+6%" />
+        <StatCard title={t('median_price')} value={`${summary.currency} ${summary.median_price.toLocaleString()}`} icon={<DollarSign />} trend="+8%" />
+        <StatCard title={t('percentile_75')} value={`${summary.currency} ${summary.p75_price.toLocaleString()}`} icon={<TrendingUp />} trend="+7%" />
+        <StatCard title={t('average_capacity')} value={t('guest_count', { count: 3 })} icon={<Users />} trend="0%" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Distribution Chart */}
         <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:border-slate-300 dark:hover:border-slate-600">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Nightly Price Distribution</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">{t('nightly_price_distribution')}</h2>
           <div className="h-72 text-slate-600 dark:text-slate-300">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dist}>
@@ -54,8 +56,8 @@ export function OverviewPage() {
                   content={(props) => (
                     <ChartTooltip
                       {...props}
-                      formatLabel={(label) => `Price: ~${Math.round(Number(label))} TRY`}
-                      valueLabel="Listings"
+                      formatLabel={(label) => t('tooltip_price', { price: Math.round(Number(label)) })}
+                      valueLabel={t('listings')}
                     />
                   )}
                 />
@@ -67,7 +69,7 @@ export function OverviewPage() {
 
         {/* Top Neighbourhoods */}
         <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:border-slate-300 dark:hover:border-slate-600">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Top Neighbourhoods by Price</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">{t('top_neighbourhoods')}</h2>
           <div className="h-72 text-slate-600 dark:text-slate-300">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={neighbourhoods} layout="vertical" margin={{ left: 40 }}>
@@ -75,7 +77,7 @@ export function OverviewPage() {
                 <YAxis dataKey="neighbourhood" type="category" axisLine={false} tickLine={false} tick={{ fill: 'currentColor', fontSize: 12 }} />
                 <Tooltip
                   cursor={{ fill: 'currentColor', opacity: 0.08 }}
-                  content={(props) => <ChartTooltip {...props} valueLabel="Median price (TRY)" />}
+                  content={(props) => <ChartTooltip {...props} valueLabel={t('median_price_try')} />}
                 />
                 <Bar dataKey="median_price" fill="#6366f1" radius={[0, 4, 4, 0]}>
                   {neighbourhoods.map((_, i) => <Cell key={i} fill={i === 0 ? '#4f46e5' : '#818cf8'} />)}
