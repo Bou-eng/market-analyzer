@@ -56,3 +56,16 @@ export interface ClusterProfile {
   median_amenities: number;
   median_distance_km: number;
 }
+
+export interface FormOptions {
+  neighbourhoods: string[];
+  room_types: string[];
+  property_types: string[];
+  bounds: {
+    accommodates: { min: number; max: number };
+    bedrooms: { min: number; max: number };
+    beds: { min: number; max: number };
+    minimum_nights: { min: number; max: number };
+    amenity_count: { min: number; max: number };
+  };
+}

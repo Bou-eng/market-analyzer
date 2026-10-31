@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '../api/client';
-import type { PredictionRequest, PredictionResponse } from '../types/api';
+import type { PredictionRequest, PredictionResponse, FormOptions } from '../types/api';
 import { ArrowRight, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { cn } from '../utils';
 
@@ -8,7 +8,7 @@ export function PredictPage() {
   const [formData, setFormData] = useState<PredictionRequest>({
     room_type: 'Entire home/apt',
     property_type: 'Entire rental unit',
-    neighbourhood_cleansed: 'Beyoğlu',
+    neighbourhood_cleansed: '', // Will be set dynamically once options load
     accommodates: 4,
     bedrooms: 2,
     beds: 2,
@@ -19,9 +19,24 @@ export function PredictPage() {
     longitude: 28.98,
   });
 
+  const [options, setOptions] = useState<FormOptions | null>(null);
   const [result, setResult] = useState<PredictionResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch dynamic options on mount
+  useEffect(() => {
+    api.getOptions()
+      .then((opts) => {
+        setOptions(opts);
+        // Set the default neighborhood to the first valid option
+        setFormData(prev => ({ ...prev, neighbourhood_cleansed: opts.neighbourhoods[0] }));
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load form options from the server.");
+      });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +60,15 @@ export function PredictPage() {
     }));
   };
 
+  // Show a loading state while waiting for the backend options
+  if (!options) {
+    return (
+      <div className="flex items-center justify-center h-64 text-slate-500 dark:text-slate-400">
+        Loading form options...
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -57,20 +81,21 @@ export function PredictPage() {
 
         <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <InputGroup label="Room Type" name="room_type" value={formData.room_type} onChange={handleChange} type="select" options={['Entire home/apt', 'Private room', 'Shared room']} />
-            <InputGroup label="Property Type" name="property_type" value={formData.property_type} onChange={handleChange} type="select" options={['Entire rental unit', 'Entire loft', 'Private room in rental unit']} />
+            <InputGroup label="Room Type" name="room_type" value={formData.room_type} onChange={handleChange} type="select" options={options.room_types} />
+            <InputGroup label="Property Type" name="property_type" value={formData.property_type} onChange={handleChange} type="select" options={options.property_types} />
           </div>
-          <InputGroup label="Neighbourhood" name="neighbourhood_cleansed" value={formData.neighbourhood_cleansed} onChange={handleChange} type="select" options={['Beyoğlu', 'Beşiktaş', 'Kadıköy', 'Şişli']} />
+          
+          <InputGroup label="Neighbourhood" name="neighbourhood_cleansed" value={formData.neighbourhood_cleansed} onChange={handleChange} type="select" options={options.neighbourhoods} />
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <InputGroup label="Accommodates" name="accommodates" value={formData.accommodates} onChange={handleChange} type="number" min={1} max={16} />
-            <InputGroup label="Bedrooms" name="bedrooms" value={formData.bedrooms} onChange={handleChange} type="number" min={0} max={10} />
-            <InputGroup label="Beds" name="beds" value={formData.beds} onChange={handleChange} type="number" min={0} max={20} />
+            <InputGroup label="Accommodates" name="accommodates" value={formData.accommodates} onChange={handleChange} type="number" min={options.bounds.accommodates.min} max={options.bounds.accommodates.max} />
+            <InputGroup label="Bedrooms" name="bedrooms" value={formData.bedrooms} onChange={handleChange} type="number" min={options.bounds.bedrooms.min} max={options.bounds.bedrooms.max} />
+            <InputGroup label="Beds" name="beds" value={formData.beds} onChange={handleChange} type="number" min={options.bounds.beds.min} max={options.bounds.beds.max} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <InputGroup label="Min. Nights" name="minimum_nights" value={formData.minimum_nights} onChange={handleChange} type="number" min={1} />
-            <InputGroup label="Amenity Count" name="amenity_count" value={formData.amenity_count} onChange={handleChange} type="number" min={0} max={100} />
+            <InputGroup label="Min. Nights" name="minimum_nights" value={formData.minimum_nights} onChange={handleChange} type="number" min={options.bounds.minimum_nights.min} max={options.bounds.minimum_nights.max} />
+            <InputGroup label="Amenity Count" name="amenity_count" value={formData.amenity_count} onChange={handleChange} type="number" min={options.bounds.amenity_count.min} max={options.bounds.amenity_count.max} />
           </div>
 
           <button 

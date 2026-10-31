@@ -1,5 +1,5 @@
 // src/api/client.ts
-import type { PredictionRequest, PredictionResponse, MarketSummary, NeighbourhoodStat, DistributionBin, ClusterProfile } from '../types/api';
+import type { PredictionRequest, PredictionResponse, FormOptions, MarketSummary, NeighbourhoodStat, DistributionBin, ClusterProfile } from '../types/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
@@ -26,4 +26,13 @@ export const api = {
   getDistribution: () => fetchApi<DistributionBin[]>('/api/v1/market/distribution?bins=20'),
   
   getClusters: () => fetchApi<ClusterProfile[]>('/api/v1/market/clusters'),
+};
+
+export const api = {
+  // ... your existing methods (e.g., predict) ...
+
+  getOptions: async (): Promise<FormOptions> => {
+    // Replace 'fetchApi' with whatever your actual fetch wrapper is named
+    return fetchApi<FormOptions>('/api/v1/market/options'); 
+  },
 };
