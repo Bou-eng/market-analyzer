@@ -73,3 +73,16 @@ class FormOptions(BaseModel):
     room_types: list[str]
     property_types: list[str]
     bounds: dict
+
+class DataQualityMetric(BaseModel):
+    metric: str
+    value: str
+    status: str
+
+class DataQualityResponse(BaseModel):
+    raw_rows: int
+    clean_rows: int
+    checks_passed: int
+    total_checks: int
+    snapshot_date: str
+    metrics: list[DataQualityMetric]

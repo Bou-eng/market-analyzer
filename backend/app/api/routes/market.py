@@ -3,13 +3,14 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request
 
-from app.schemas import ClusterProfile, MarketSummary, NeighbourhoodStat, DistributionBin, FormOptions
+from app.schemas import ClusterProfile, MarketSummary, NeighbourhoodStat, DistributionBin, FormOptions, DataQualityResponse
 from app.services.market import (
     get_clusters_from_csv,
     get_neighbourhoods,
     get_summary,
     get_distribution,
     get_form_options,
+    get_data_quality,
 )
 
 import json
@@ -18,6 +19,9 @@ from app.config import settings
 
 router = APIRouter(prefix="/api/v1/market", tags=["market"])
 
+@router.get("/data-quality", response_model=DataQualityResponse)
+def data_quality() -> DataQualityResponse:
+    return DataQualityResponse(**get_data_quality())
 
 @router.get("/model-metrics")
 def model_metrics():

@@ -4,6 +4,8 @@ import { OverviewPage } from './pages/OverviewPage';
 import { PredictPage } from './pages/PredictPage';
 import { ModelPage } from './pages/ModelPage';
 import { SegmentsPage } from './pages/SegmentsPage';
+import { DataPage } from './pages/DataPage';
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           <Route path="/predict" element={<PredictPage />} />
           <Route path="/segments" element={<SegmentsPage />} />
           <Route path="/model" element={<ModelPage />} />
+          <Route path="/data" element={<DataPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

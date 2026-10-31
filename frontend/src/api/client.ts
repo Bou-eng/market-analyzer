@@ -8,6 +8,7 @@ import type {
   DistributionBin, 
   ClusterProfile, 
   ModelMetrics,
+  DataQualityResponse,
 } from '../types/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
@@ -41,4 +42,7 @@ export const api = {
 
   // Added the missing method for the ModelPage
   getModelMetrics: () => fetchApi<ModelMetrics>('/api/v1/market/model-metrics'),
+
+  getDataQuality: () => fetchApi<DataQualityResponse>('/api/v1/market/data-quality'),
+
 };

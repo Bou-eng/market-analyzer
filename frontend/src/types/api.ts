@@ -80,3 +80,18 @@ export interface ModelMetrics {
   models: { model: string; mae: number; rmse: number; r2: number }[];
   chosen: string;
 }
+
+export interface DataQualityMetric {
+  metric: string;
+  value: string;
+  status: string;
+}
+
+export interface DataQualityResponse {
+  raw_rows: number;
+  clean_rows: number;
+  checks_passed: number;
+  total_checks: number;
+  snapshot_date: string;
+  metrics: DataQualityMetric[];
+}

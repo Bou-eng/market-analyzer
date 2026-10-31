@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Activity, BarChart3, Home, Menu, X } from 'lucide-react';
+import { Moon, Sun, Activity, BarChart3, Home, Menu, X, PieChart, Cpu, Database } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom'; 
 import { cn } from '../utils';
-import { PieChart, Cpu } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 
@@ -41,6 +40,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <NavItem to="/predict" icon={<BarChart3 size={18} />} label={t('nav_predict')} />
                 <NavItem to="/segments" icon={<PieChart size={18} />} label={t('nav_segments')} />
                 <NavItem to="/model" icon={<Cpu size={18} />} label={t('nav_model')} />
+                <NavItem to="/data" icon={<Database size={18} />} label={t('nav_data')} />
+
               </nav>
             </div>
             
@@ -92,6 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <NavItem to="/predict" icon={<BarChart3 size={18} />} label={t('nav_predict')} onNavigate={() => setIsMenuOpen(false)} />
                 <NavItem to="/segments" icon={<PieChart size={18} />} label={t('nav_segments')} onNavigate={() => setIsMenuOpen(false)} />
                 <NavItem to="/model" icon={<Cpu size={18} />} label={t('nav_model')} onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/data" icon={<Database size={18} />} label={t('nav_data')} onNavigate={() => setIsMenuOpen(false)} />
               </div>
             </nav>
           </div>
