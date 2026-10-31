@@ -3,12 +3,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request
 
-from app.schemas import ClusterProfile, MarketSummary, NeighbourhoodStat, DistributionBin
+from app.schemas import ClusterProfile, MarketSummary, NeighbourhoodStat, DistributionBin, FormOptions
 from app.services.market import (
     get_clusters_from_csv,
     get_neighbourhoods,
     get_summary,
     get_distribution,
+    get_form_options,
 )
 
 import json
@@ -27,6 +28,10 @@ def model_metrics():
         
     return json.loads(path.read_text())
 
+
+@router.get("/options", response_model=FormOptions)
+def options(req: Request) -> FormOptions:
+    return FormOptions(**get_form_options(_get_df(req)))
 
 
 def _get_df(req: Request) -> "pd.DataFrame":

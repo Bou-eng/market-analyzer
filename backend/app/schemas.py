@@ -67,3 +67,9 @@ class ClusterProfile(BaseModel):
     median_bedrooms: float
     median_amenities: float
     median_distance_km: float
+
+class FormOptions(BaseModel):
+    neighbourhoods: list[str]
+    room_types: list[str]
+    property_types: list[str]
+    bounds: dict
