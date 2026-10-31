@@ -1,21 +1,34 @@
 """Market stats endpoints."""
 from __future__ import annotations
+import pandas as pd
+
+import json
 
 from fastapi import APIRouter, HTTPException, Request
 
-from app.schemas import ClusterProfile, MarketSummary, NeighbourhoodStat, DistributionBin, FormOptions, DataQualityResponse
+def _get_df(req: Request) -> pd.DataFrame:  # <-- Removed the quotes
+    df = req.app.state.market_df
+    if df is None:
+        raise HTTPException(status_code=503, detail="Market data not loaded")
+    return df
+
+from app.config import settings
+from app.schemas import (
+    ClusterProfile,
+    DataQualityResponse,
+    DistributionBin,
+    FormOptions,
+    MarketSummary,
+    NeighbourhoodStat,
+)
 from app.services.market import (
     get_clusters_from_csv,
-    get_neighbourhoods,
-    get_summary,
+    get_data_quality,
     get_distribution,
     get_form_options,
-    get_data_quality,
+    get_neighbourhoods,
+    get_summary,
 )
-
-import json
-from pathlib import Path
-from app.config import settings
 
 router = APIRouter(prefix="/api/v1/market", tags=["market"])
 

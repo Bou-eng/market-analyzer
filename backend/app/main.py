@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 import joblib
 import pandas as pd

@@ -1,8 +1,9 @@
 """Market statistics service — wraps analytics functions for JSON output."""
 from __future__ import annotations
 
-import pandas as pd
 import json
+
+import pandas as pd
 
 from app.analytics.market_stats import (
     neighborhood_summary,

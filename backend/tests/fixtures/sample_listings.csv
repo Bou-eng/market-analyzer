@@ -1,0 +1,4 @@
+id,price,accommodates,bedrooms,latitude,longitude,minimum_nights,amenities
+1,"$1,200.00",4,2,41.01,28.98,2,"[""Wifi"", ""Kitchen""]"
+2,"90",2,1,41.02,28.99,30,"[""Wifi""]"
+3,"invalid_price",4,2,95.0,28.98,2,"[""Pool""]"

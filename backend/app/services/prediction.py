@@ -9,8 +9,8 @@ import pandas as pd
 from sklearn.base import BaseEstimator
 
 from app.config import settings
-from app.ml.features import ALL_FEATURES
 from app.ml.clustering import CLUSTER_FEATURES
+from app.ml.features import ALL_FEATURES
 
 
 def build_feature_frame(features: dict, feature_list: list[str]) -> pd.DataFrame:

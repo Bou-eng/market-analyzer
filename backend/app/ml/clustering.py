@@ -7,7 +7,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-
 # Features used for clustering — the *contract* with the serving layer.
 # Any change here must be reflected in the API schema (Phase 6).
 CLUSTER_FEATURES: list[str] = [

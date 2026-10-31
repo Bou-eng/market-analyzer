@@ -3,7 +3,6 @@
 Each function is pure (input -> output) so it can be unit-tested
 in Phase 8 without a database or CSV.
 """
-import re
 import numpy as np
 import pandas as pd
 
