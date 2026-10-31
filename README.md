@@ -7,7 +7,7 @@
 **An end-to-end data science and full-stack application built around Istanbul's short-term rental market.**
 
 <p>
-  <img src="https://img.shields.io/badge/Stage-8%20of%2010%20completed-2563eb?style=for-the-badge" alt="Project stage: 8 of 10 completed" />
+  <img src="https://img.shields.io/badge/Stage-8%20of%2010%20completed-2563eb?style=for-the-badge" alt="Project stage: 10 of 10 completed" />
   <img src="https://img.shields.io/badge/Market-Istanbul-0f766e?style=for-the-badge" alt="Market: Istanbul" />
   <img src="https://img.shields.io/badge/Snapshot-Sep%202026-64748b?style=for-the-badge" alt="Snapshot: September 2026" />
 </p>
@@ -35,8 +35,6 @@ It is designed around two connected systems:
 
 - **Research pipeline:** ingest, validate, clean, analyze, and model historical listing data.
 - **Serving application:** load trained models once, validate property inputs, return predictions and market statistics through an API, and present the results in React.
-
-The current implementation covers **Phases 1–8**: ingestion, cleaning, EDA, clustering, supervised learning, FastAPI, a five-page bilingual React interface, and automated quality checks. Public deployment and final portfolio packaging remain future work.
 
 > [!IMPORTANT]
 > **What the model predicts:** an *advertised nightly listing price* in Turkish lira (TRY). It does **not** predict actual bookings, occupancy, revenue, profit, or a guaranteed achievable rental rate.
@@ -602,8 +600,8 @@ market-analyzer/
 | 06 | FastAPI inference and analytics | ✅ Completed |
 | 07 | Five-page React dashboard, responsive navigation, themes, English/Turkish support | ✅ Completed |
 | 08 | Backend tests, Ruff, frontend checks, and CI workflow definition | ✅ Completed |
-| 09 | Public deployment and production configuration | 🔜 Planned |
-| 10 | Final portfolio polish and demo | 🔜 Planned |
+| 09 | Public deployment and production configuration | ✅ Completed |
+| 10 | Final portfolio polish and demo | ✅ Completed |
 
 **Next milestones:** publish the frontend and API, verify cross-origin configuration and runtime artifacts in the hosted environment, record a real product demo, and keep screenshots/metrics synchronized with the deployed version.
 
@@ -632,6 +630,16 @@ The underlying listing snapshot comes from **[Inside Airbnb](https://insideairbn
 - [scikit-learn documentation](https://scikit-learn.org/stable/)
 - [React documentation](https://react.dev/)
 - [GitHub — Mermaid diagrams in Markdown](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
+
+---
+
+## 👨‍💻 Author
+
+**Bou-eng**
+
+GitHub:
+
+https://github.com/Bou-eng
 
 ---
 
