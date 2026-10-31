@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Moon, Sun, Activity, BarChart3, Home, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom'; 
 import { cn } from '../utils';
+import { PieChart, TrendingUp, Cpu } from 'lucide-react';
+
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Default to Night Mode
@@ -35,6 +37,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <nav className="hidden md:flex gap-1" aria-label="Primary navigation">
                 <NavItem to="/" icon={<Home size={18} />} label="Overview" />
                 <NavItem to="/predict" icon={<BarChart3 size={18} />} label="Predict" />
+                <NavItem to="/segments" icon={<PieChart size={18} />} label="Segments" />
+                <NavItem to="/model" icon={<Cpu size={18} />} label="Model" />
               </nav>
             </div>
             
@@ -75,6 +79,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="flex flex-col gap-1 pb-4 pt-1">
                 <NavItem to="/" icon={<Home size={18} />} label="Overview" onNavigate={() => setIsMenuOpen(false)} />
                 <NavItem to="/predict" icon={<BarChart3 size={18} />} label="Predict" onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/segments" icon={<PieChart size={18} />} label="Segments" onNavigate={() => setIsMenuOpen(false)} />
+                <NavItem to="/model" icon={<Cpu size={18} />} label="Model" onNavigate={() => setIsMenuOpen(false)} />
               </div>
             </nav>
           </div>

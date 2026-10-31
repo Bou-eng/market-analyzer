@@ -1,4 +1,5 @@
 // src/types/api.ts
+
 export interface PredictionRequest {
   room_type: string;
   property_type: string;
@@ -68,4 +69,14 @@ export interface FormOptions {
     minimum_nights: { min: number; max: number };
     amenity_count: { min: number; max: number };
   };
+}
+
+export interface ModelMetrics {
+  n_train: number;
+  n_test: number;
+  target: string;
+  features: string[];
+  baseline: { model: string; mae: number; rmse: number; r2: number };
+  models: { model: string; mae: number; rmse: number; r2: number }[];
+  chosen: string;
 }

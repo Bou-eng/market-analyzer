@@ -1,5 +1,14 @@
 // src/api/client.ts
-import type { PredictionRequest, PredictionResponse, FormOptions, MarketSummary, NeighbourhoodStat, DistributionBin, ClusterProfile } from '../types/api';
+import type { 
+  PredictionRequest, 
+  PredictionResponse, 
+  FormOptions, 
+  MarketSummary, 
+  NeighbourhoodStat, 
+  DistributionBin, 
+  ClusterProfile, 
+  ModelMetrics,
+} from '../types/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
@@ -15,6 +24,7 @@ async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+// Single consolidated export
 export const api = {
   predict: (data: PredictionRequest) => 
     fetchApi<PredictionResponse>('/api/v1/predict', { method: 'POST', body: JSON.stringify(data) }),
@@ -26,13 +36,9 @@ export const api = {
   getDistribution: () => fetchApi<DistributionBin[]>('/api/v1/market/distribution?bins=20'),
   
   getClusters: () => fetchApi<ClusterProfile[]>('/api/v1/market/clusters'),
-};
+  
+  getOptions: () => fetchApi<FormOptions>('/api/v1/market/options'),
 
-export const api = {
-  // ... your existing methods (e.g., predict) ...
-
-  getOptions: async (): Promise<FormOptions> => {
-    // Replace 'fetchApi' with whatever your actual fetch wrapper is named
-    return fetchApi<FormOptions>('/api/v1/market/options'); 
-  },
+  // Added the missing method for the ModelPage
+  getModelMetrics: () => fetchApi<ModelMetrics>('/api/v1/market/model-metrics'),
 };

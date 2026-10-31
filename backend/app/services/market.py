@@ -27,13 +27,17 @@ def get_summary(df: pd.DataFrame) -> dict:
 
 def get_form_options(df: pd.DataFrame) -> dict:
     """Return valid dropdown options and numeric bounds from the training data."""
-    # Get the top 15 most common neighborhoods to keep the dropdown manageable
+    # 1. Neighborhoods: top 15
     top_neighbourhoods = df["neighbourhood_cleansed"].value_counts().head(15).index.tolist()
+    
+    # 2. Property Types: ONLY those with >= 50 listings
+    valid_property_types = df["property_type"].value_counts()
+    valid_property_types = valid_property_types[valid_property_types >= 50].index.tolist()
     
     return {
         "neighbourhoods": sorted(top_neighbourhoods),
         "room_types": sorted(df["room_type"].dropna().unique().tolist()),
-        "property_types": sorted(df["property_type"].dropna().value_counts().head(15).index.tolist()),
+        "property_types": sorted(valid_property_types),
         "bounds": {
             "accommodates": {"min": 1, "max": int(df["accommodates"].max())},
             "bedrooms": {"min": 0, "max": int(df["bedrooms"].max())},
