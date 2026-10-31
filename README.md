@@ -7,7 +7,7 @@
 **An end-to-end data science and full-stack application built around Istanbul's short-term rental market.**
 
 <p>
-  <img src="https://img.shields.io/badge/Stage-8%20of%2010%20completed-2563eb?style=for-the-badge" alt="Project stage: 10 of 10 completed" />
+  <img src="https://img.shields.io/badge/Stage-10%20of%2010%20completed-16a34a?style=for-the-badge" alt="Project stage: 10 of 10 completed" />
   <img src="https://img.shields.io/badge/Market-Istanbul-0f766e?style=for-the-badge" alt="Market: Istanbul" />
   <img src="https://img.shields.io/badge/Snapshot-Sep%202026-64748b?style=for-the-badge" alt="Snapshot: September 2026" />
 </p>
@@ -21,7 +21,7 @@
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions" />
 </p>
 
-**[Explore the analytics](#exploratory-data-analysis) · [See the models](#machine-learning-results) · [API reference](#api-reference) · [Run locally](#getting-started) · [Roadmap](#project-roadmap)**
+**[🚀 Live Demo](https://market-analyzer-six.vercel.app/) · [Explore the analytics](#exploratory-data-analysis) · [See the models](#machine-learning-results) · [API reference](#api-reference) · [Run locally](#getting-started)**
 
 </div>
 
@@ -30,6 +30,8 @@
 ## Overview
 
 **Dynamic Market Analyzer** is a full-stack analytics project that transforms public short-term rental listings into a **reproducible data pipeline**, **market segmentation**, **nightly-price predictions**, and a **responsive web dashboard**.
+
+All **10 project phases are complete**, including production deployment and final portfolio packaging. The live application is available at **[market-analyzer-six.vercel.app](https://market-analyzer-six.vercel.app/)**.
 
 It is designed around two connected systems:
 
@@ -271,7 +273,7 @@ The residual analysis identified **underprediction for very expensive listings**
 
 ## Web dashboard
 
-The **React + TypeScript** frontend is implemented and connected to FastAPI through a typed client. It uses responsive desktop/mobile navigation, Recharts, Lucide icons, a custom Market Analyzer favicon/title, light and dark themes, and instant **English/Turkish language switching** implemented with React Context.
+The **[live React + TypeScript dashboard](https://market-analyzer-six.vercel.app/)** is deployed on Vercel and connected to FastAPI through a typed client. It uses responsive desktop/mobile navigation, Recharts, Lucide icons, a custom Market Analyzer favicon/title, light and dark themes, and instant **English/Turkish language switching** implemented with React Context.
 
 | Page | What's available |
 |---|---|
@@ -466,7 +468,7 @@ On Windows PowerShell, set `$env:PYTHONPATH = "."` before running pytest from `b
 ## Project structure
 
 <details>
-<summary><strong>Expand repository layout (completed Phases 1–8)</strong></summary>
+<summary><strong>Expand repository layout (completed Phases 1–10)</strong></summary>
 
 ```text
 market-analyzer/
@@ -603,7 +605,7 @@ market-analyzer/
 | 09 | Public deployment and production configuration | ✅ Completed |
 | 10 | Final portfolio polish and demo | ✅ Completed |
 
-**Next milestones:** publish the frontend and API, verify cross-origin configuration and runtime artifacts in the hosted environment, record a real product demo, and keep screenshots/metrics synchronized with the deployed version.
+**Current status:** all planned phases are complete and the application is publicly available. Ongoing work is limited to maintenance, dependency updates, monitoring, and keeping screenshots and model metrics synchronized with future data refreshes.
 
 <details>
 <summary><strong>Potential future enhancements</strong></summary>
@@ -647,6 +649,6 @@ https://github.com/Bou-eng
 
 **Built to connect data engineering, applied machine learning, API design, and frontend development in one reproducible project.**
 
-*Dynamic Market Analyzer · Istanbul · September 2026*
+*[Market Analyzer](https://market-analyzer-six.vercel.app/) · Istanbul · September 2026*
 
 </div>
