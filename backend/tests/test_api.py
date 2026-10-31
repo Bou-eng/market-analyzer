@@ -1,7 +1,5 @@
 import joblib
-import pytest
-from fastapi.testclient import TestClient
-from app.main import app
+
 from app.config import settings
 from app.ml.features import ALL_FEATURES
 

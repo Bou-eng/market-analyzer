@@ -1,5 +1,7 @@
 import pandas as pd
-from app.data.cleaning import parse_price, haversine_km, count_amenities
+
+from app.data.cleaning import count_amenities, haversine_km, parse_price
+
 
 def test_parse_price():
     raw = pd.Series(["$1,200.00", "90", None, "invalid"])

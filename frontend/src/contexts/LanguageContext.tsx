@@ -113,7 +113,7 @@ const en = {
 type TranslationKey = keyof typeof en;
 
 const tr: Record<TranslationKey, string> = {
-  app_name: 'Piyasa Analizörü',
+  app_name: 'Market Analyzer',
   nav_overview: 'Genel Bakış',
   nav_predict: 'Tahmin',
   nav_segments: 'Segmentler',

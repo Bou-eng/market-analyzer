@@ -1,6 +1,8 @@
-import pandas as pd
 import numpy as np
-from app.ml.features import build_preprocessor, NUMERIC_FEATURES, CATEGORICAL_FEATURES
+import pandas as pd
+
+from app.ml.features import build_preprocessor
+
 
 def test_preprocessor():
     # Create a tiny dataframe with missing values

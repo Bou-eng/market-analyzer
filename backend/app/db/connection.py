@@ -1,6 +1,7 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
+
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
