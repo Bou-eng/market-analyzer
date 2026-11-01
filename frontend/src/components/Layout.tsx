@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Activity, BarChart3, Home, Menu, X, PieChart, Cpu, Database } from 'lucide-react';
+import { Moon, Sun, Activity, BarChart3, Home, Menu, X, PieChart, Cpu, Database, GitFork } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom'; 
 import { cn } from '../utils';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -105,6 +105,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>
+
+      <footer className="relative overflow-hidden border-t border-slate-200 bg-white/70 dark:border-slate-800 dark:bg-slate-950/50">
+        <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-px max-w-lg bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Istanbul Market Analyzer
+          </p>
+
+          <a
+            href="https://github.com/Bou-eng"
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-600 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:text-blue-400 dark:focus-visible:ring-offset-slate-950"
+            aria-label="Visit Bou-eng on GitHub"
+          >
+            <GitFork size={18} aria-hidden="true" className="transition-transform group-hover:rotate-6" />
+            <span>Bou-eng</span>
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
